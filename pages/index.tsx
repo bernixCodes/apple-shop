@@ -5,8 +5,13 @@ import styles from "../styles/Home.module.css";
 import Landing from "./../components/Landing";
 import { Tab } from "@headlessui/react";
 import { GetServerSideProps } from "next";
+import { fetchCategories } from "./../utils/fetchCategories";
 
-export default function Home() {
+interface Props {
+  categories: Category[];
+}
+
+export default function Home({ categories }: Props) {
   return (
     <div className={styles.container}>
       <Head>
@@ -26,7 +31,7 @@ export default function Home() {
           </h1>
           <Tab.Group>
             <Tab.List className="flex justify-center">
-              {/* {categories.map((category) => (
+              {categories.map((category) => (
                 <Tab
                   key={category._id}
                   id={category._id}
@@ -40,7 +45,7 @@ export default function Home() {
                 >
                   {category.title}
                 </Tab>
-              ))} */}
+              ))}
             </Tab.List>
             <Tab.Panels className="mx-auto max-w-fit pt-10 pb-24 sm:px-4">
               {/* <Tab.Panel className="tabPanel">{showProducts(0)}</Tab.Panel>
@@ -57,9 +62,11 @@ export default function Home() {
 
 //backend code
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  // const categories = await fetchCategories()
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const categories = await fetchCategories();
   return {
-    props: {},
+    props: {
+      categories,
+    },
   };
 };
