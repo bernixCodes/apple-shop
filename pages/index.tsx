@@ -7,6 +7,7 @@ import { Tab } from "@headlessui/react";
 import { GetServerSideProps } from "next";
 import { fetchCategories } from "./../utils/fetchCategories";
 import { fetchProducts } from "./../utils/fetchProducts";
+import Product from "./../components/Product";
 
 interface Props {
   categories: Category[];
@@ -15,11 +16,11 @@ interface Props {
 
 export default function Home({ categories, products }: Props) {
   const showProducts = (category: number) => {
-    return products.filter((item) => {
-      item.category._ref ===
-        categories[category]._id.map((product) => <Product />);
-    });
+    return products
+      .filter((item) => item.category._ref === categories[category]._id)
+      .map((product) => <Product product={product} key={product._id} />);
   };
+
   return (
     <div className={styles.container}>
       <Head>
