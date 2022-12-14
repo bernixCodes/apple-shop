@@ -6,12 +6,20 @@ import Landing from "./../components/Landing";
 import { Tab } from "@headlessui/react";
 import { GetServerSideProps } from "next";
 import { fetchCategories } from "./../utils/fetchCategories";
+import { fetchProducts } from "./../utils/fetchProducts";
 
 interface Props {
   categories: Category[];
+  products: Product[];
 }
 
-export default function Home({ categories }: Props) {
+export default function Home({ categories, products }: Props) {
+  const showProducts = (category: number) => {
+    return products.filter((item) => {
+      item.category._ref ===
+        categories[category]._id.map((product) => <Product />);
+    });
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -48,10 +56,10 @@ export default function Home({ categories }: Props) {
               ))}
             </Tab.List>
             <Tab.Panels className="mx-auto max-w-fit pt-10 pb-24 sm:px-4">
-              {/* <Tab.Panel className="tabPanel">{showProducts(0)}</Tab.Panel>
+              <Tab.Panel className="tabPanel">{showProducts(0)}</Tab.Panel>
               <Tab.Panel className="tabPanel">{showProducts(1)}</Tab.Panel>
               <Tab.Panel className="tabPanel">{showProducts(2)}</Tab.Panel>
-              <Tab.Panel className="tabPanel">{showProducts(3)}</Tab.Panel> */}
+              <Tab.Panel className="tabPanel">{showProducts(3)}</Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         </div>
@@ -64,9 +72,11 @@ export default function Home({ categories }: Props) {
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const categories = await fetchCategories();
+  const products = await fetchProducts();
   return {
     props: {
       categories,
+      products,
     },
   };
 };
