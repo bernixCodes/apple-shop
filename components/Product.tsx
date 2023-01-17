@@ -2,13 +2,24 @@ import Image from "next/image";
 import React from "react";
 import { urlFor } from "../sanity";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { addToBasket } from "../redux/basketSlice";
+import toast from "react-hot-toast";
 
 interface Props {
   product: Product;
 }
 
 function Product({ product }: Props) {
-  const addItemToCart = () => {};
+  const dispatch = useDispatch();
+
+  const addItemToCart = () => {
+    dispatch(addToBasket(product));
+
+    toast.success(`${product.title} added to basket`, {
+      position: "bottom-center",
+    });
+  };
   return (
     <div className="flex h-fit w-[320px] select-none flex-col space-y-3 rounded-xl bg-[#35383C] p-8 md:h-[500px] md:w-[400px] md:p-10">
       <div className="relative h-64 w-full md:h-72">

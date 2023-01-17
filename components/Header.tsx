@@ -2,9 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { BiSearch, BiShoppingBag } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { selectBasketItems } from "../redux/basketSlice";
 
 function Header() {
   const session = false;
+
+  const items = useSelector(selectBasketItems);
   return (
     <header className="sticky top-0 z-30 flex w-full items-center justify-between bg-[#e7ecee] p-4">
       <div className="flex items-center justify-center md:w-1/5">
@@ -32,7 +36,7 @@ function Header() {
           <div className="relative cursor-pointer">
             <BiShoppingBag className="headerIcon" />
             <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-violet-500 text-[10px] text-white">
-              5
+              {items.length}
             </span>
           </div>
         </Link>
