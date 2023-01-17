@@ -8,6 +8,7 @@ import { GetServerSideProps } from "next";
 import { fetchCategories } from "./../utils/fetchCategories";
 import { fetchProducts } from "./../utils/fetchProducts";
 import Product from "./../components/Product";
+import Basket from "../components/Basket";
 
 interface Props {
   categories: Category[];
@@ -30,6 +31,8 @@ export default function Home({ categories, products }: Props) {
       </Head>
 
       <Header />
+
+      <Basket />
       <main className="relative h-[200vh] bg-[#e7ecee]">
         <Landing />
       </main>
