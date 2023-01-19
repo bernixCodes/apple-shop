@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import CheckoutProduct from "../components/CheckoutProduct";
 import Currency from "react-currency-formatter";
 import { FaChevronDown } from "react-icons/fa";
+import { fetchPostJSON } from "../utils/api-helpers";
+import Stripe from "stripe";
+import getStripe from "../utils/get-stripejs";
 
 function Checkout() {
   const items = useSelector(selectBasketItems);
@@ -26,8 +29,30 @@ function Checkout() {
 
     setGroupItemsInBasket(groupedItems);
   }, [items]);
+
   const createCheckoutSession = async () => {
     setLoading(true);
+
+    const checkoutSession: Stripe.Checkout.Session = await fetchPostJSON(
+      "/api/checkout_sessions",
+      {
+        items: items,
+      }
+    );
+
+    if ((checkoutSession as any).statusCode === 500) {
+      console.error((checkoutSession as any).message);
+      return;
+    }
+
+    const stripe = await getStripe();
+
+    const { error } = await stripe!.redirectToCheckout({
+      sessionId: checkoutSession.id,
+    });
+
+    console.warn(error.message);
+    setLoading(false);
   };
   return (
     <div className="min-h-screen overflow-hidden bg-[#e7ecee]">

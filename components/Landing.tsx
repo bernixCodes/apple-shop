@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Button from "./Button";
+import { useRouter } from "next/router";
 
 function Landing() {
+  const router = useRouter();
   return (
     <section className="sticky top-0 mx-auto flex h-screen max-w-[1350px] items-center justify-between px-8">
       <div className="space-y-8 ">
@@ -14,7 +16,7 @@ function Landing() {
         </h1>
 
         <div className="space-x-8">
-          <Button title="Buy Now" />
+          <Button title="Buy Now" onClick={() => router.push("/checkout")} />
           <a className="relative cursor-pointer text-lg font-medium before:absolute before:inset-x-0 before:-bottom-1.5 before:h-0.5 before:origin-left before:scale-x-0 before: transform before:rounded-bl before:bg-black before:transition-all before:duration-200 hover:before:scale-x-100">
             Learn More
           </a>
