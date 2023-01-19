@@ -11,19 +11,23 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const items: Product[] = req.body.items;
+    const items = req.body.items;
 
-    const transformedItems = items.map((item) => ({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: item.title,
-          images: [urlFor(item.image[0]).url()],
-        },
-        unit_amount: Number(item.price) * 100,
-      },
-      quantity: 1,
-    }));
+    const transformedItems = items.map(
+      (item: { title: any; image: any[]; price: any }) => {
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.title,
+              images: [urlFor(item.image[0]).url()],
+            },
+            unit_amount: Number(item.price) * 100,
+          },
+          quantity: 1,
+        };
+      }
+    );
 
     try {
       const params: Stripe.Checkout.SessionCreateParams = {
@@ -34,7 +38,12 @@ export default async function handler(
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/checkout`,
         metadata: {
-          images: JSON.stringify(items.map((item) => item.image[0].asset.url)),
+          images: JSON.stringify(
+            items.map(
+              (item: { image: { asset: { url: any } }[] }) =>
+                item.image[0].asset.url
+            )
+          ),
         },
       };
 
