@@ -13,19 +13,17 @@ export default async function handler(
   if (req.method === "POST") {
     const items: Product[] = req.body.items;
 
-    const transformedItems = items.map((item) => {
-      return {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: item.title,
-            images: [urlFor(item.image[0]).url()],
-          },
-          unit_amount: Number(item.price) * 100,
+    const transformedItems = items.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.title,
+          images: [urlFor(item.image[0]).url()],
         },
-        quantity: 1,
-      };
-    });
+        unit_amount: Number(item.price) * 100,
+      },
+      quantity: 1,
+    }));
 
     try {
       const params: Stripe.Checkout.SessionCreateParams = {
