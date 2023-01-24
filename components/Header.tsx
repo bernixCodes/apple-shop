@@ -4,10 +4,10 @@ import { BiSearch, BiShoppingBag } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { selectBasketItems } from "../redux/basketSlice";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 function Header() {
-  const session = false;
-
+  const { data: session } = useSession();
   const items = useSelector(selectBasketItems);
   return (
     <header className="sticky top-0 z-30 flex w-full items-center justify-between bg-[#e7ecee] p-4">
@@ -46,20 +46,17 @@ function Header() {
         {session ? (
           <Image
             src={
-              //session.user?.image} ||
+              session.user?.image ||
               "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector.png"
             }
             alt=""
             className="cursor-pointer rounded-full"
             width={34}
             height={34}
-            // onClick ={()=>signOut()}
+            onClick={() => signOut()}
           />
         ) : (
-          <FaUserCircle
-            className="headerIcon"
-            //  onClick={()=>signIn()}
-          />
+          <FaUserCircle className="headerIcon" onClick={() => signIn()} />
         )}
       </div>
     </header>
